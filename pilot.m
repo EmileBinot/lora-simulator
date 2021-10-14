@@ -3,7 +3,7 @@ clc;
 
 % LoRa_Tx : full LoRa transmitting chain
 
-CR=8;
+CR=8;%oui
 SF=7;
 
 %% Message to binary vector
