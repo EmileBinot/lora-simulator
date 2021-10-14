@@ -17,6 +17,7 @@ end
 
 
 %% Hamming
+
 for i = 1: (length(hamming_in))
     hamming_out(:,i) = LoRa_Encode_Hamming(hamming_in(:,i)',CR);
 end

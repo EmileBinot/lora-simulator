@@ -1,6 +1,6 @@
 clear;
 CR = 4;
-message =[0 0 0 0];
+in =[1 0 0 1];
 
 %% EMITTER
 
@@ -14,15 +14,15 @@ switch CR
    case 3
         % Hamming(7,4)
         [H,G,~,~] = hammgen(3);
-        encoded =  mod(message * G,2);
+        out =  mod(in * G,2);
         %encoded = [p0 p1 p2 d0 d1 d2 d3]
    case 4
         % Hamming(8,4)
         % Matrixes taken from : en.wikipedia.org/wiki/Hamming_code
         H=[0 1 1 1 1 0 0 0;1 0 1 1 0 1 0 0;1 1 0 1 0 0 1 0;1 1 1 0 0 0 0 1];
         G=[1 0 0 0 0 1 1 1;0 1 0 0 1 0 1 1;0 0 1 0 1 1 0 1;0 0 0 1 1 1 1 0];
-        encoded =  mod(message * G,2);
-        encoded(:,8)=sum(xor(encoded,encoded));
+        out =  mod(in * G,2);
+        out(:,8)=sum(xor(out,out));
         %TODO !
         %encoded = [d0 d1 d2 d3 p0 p1 p2 p3], p3 being parity bit
    otherwise
@@ -42,9 +42,9 @@ switch CR
        in=in(:,1:6);
        disp(['CR ='  num2str(CR) ' not supported']);
    case 3
-       S =  mod(H * encoded',2);
+       S =  mod(H * out',2);
    case 4
-       S =  mod(H * encoded',2);
+       S =  mod(H * out',2);
    otherwise
       disp(['WRONG CR']);
 end
