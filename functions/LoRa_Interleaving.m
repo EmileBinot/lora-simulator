@@ -1,13 +1,16 @@
-function [interleaved_block] = LoRa_Interleaving(in_matrix)
+function [out] = LoRa_Interleaving(in,CR,SF)
 
 % algorithm : www.researchgate.net/publication/339255011_Towards_an_SDR_implementation_of_LoRa_Reverse-engineering_demodulation_strategies_and_assessment_over_Rayleigh_channel
 
-%% INTERLEAVING for SF=7, CR=4 (blocks of 7 lines *(4+CR) columns)
-interleaved_block = rot90(in_matrix,2);
-interleaved_block= [interleaved_block(:,1) circshift(interleaved_block(:,2),1)...
-                    circshift(interleaved_block(:,3),2) circshift(interleaved_block(:,4),3)...
-                    circshift(interleaved_block(:,5),4) circshift(interleaved_block(:,6),5)...
-                    circshift(interleaved_block(:,7),6) interleaved_block(:,8)]';
+%% Interleaving
+out=zeros(CR+4,SF);
+for i= 0:(CR+4)-1
+    for j=0:(SF)-1
+        idi=SF-1-mod(j-i,SF);
+        idj=CR+4-1-i;
+        out(i+1,j+1)=in(idi+1,idj+1);
+    end
+end
 
 end
 

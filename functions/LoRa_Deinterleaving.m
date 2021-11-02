@@ -1,14 +1,15 @@
-function [deinterleaved_block] = LoRa_Deinterleaving(interleaved_block)
+function [out] = LoRa_Deinterleaving(in,CR,SF)
 
 % algorithm : www.researchgate.net/publication/339255011_Towards_an_SDR_implementation_of_LoRa_Reverse-engineering_demodulation_strategies_and_assessment_over_Rayleigh_channel
 
-%% DETINTERLEAVING for SF=7, CR=4 (blocks of (4+CR) lines * 7 columns)
-
-temp=interleaved_block';
-temp= [temp(:,1) circshift(temp(:,2),-1)...
-                    circshift(temp(:,3),-2) circshift(temp(:,4),-3)...
-                    circshift(temp(:,5),-4) circshift(temp(:,6),-5)...
-                    circshift(temp(:,7),-6) temp(:,8)];
-deinterleaved_block = rot90(temp,-2);
+%% Deinterleaving
+out=zeros(SF,CR+4);
+for i= 0:(SF)-1
+    for j=0:(CR+4)-1
+        idi=CR+4-1-j;
+        idj=mod(SF-1-i+(CR+4)-1-j,SF);
+        out(i+1,j+1)=in(idi+1,idj+1);
+    end
+end
 
 end

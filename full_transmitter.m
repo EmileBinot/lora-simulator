@@ -71,9 +71,9 @@ clc;
 % 
 % Demod_chirp = LoRa_Modulation(B,7,zeros(27),-1);
 % 
-% save('./LoRa-chain-simulation/signals_mod.mat')
+% save('signals_mod.mat')
 
-load('./LoRa-chain-simulation/signals_mod.mat');
+load('signals_mod.mat');
 
 signal_demod=signalIQ.*Demod_chirp(1:length(signalIQ),:);
 
@@ -83,12 +83,12 @@ f = (0:length(unchirped_signal_fft_full)-1)*Fs/length(unchirped_signal_fft_full)
 
 div = floor(length(signalIQ)/128);
 
-% figure;
-% subplot(2,1,1);
-% spectrogram(signal_demod,20,15,128,B);
-% subplot(2,1,2); 
-% plot(f,abs(unchirped_signal_fft_full));
-% figure;
+figure;
+subplot(2,1,1);
+spectrogram(signal_demod,20,15,128,B);
+subplot(2,1,2); 
+plot(f,abs(unchirped_signal_fft_full));
+figure;
 
 u = symunit;
 symbols_demod=[];
