@@ -1,5 +1,7 @@
 function [transmittedIQ,ts] = LoRa_Modulation(B,SF,c,sign)
 
+% Equations taken from : hal.archives-ouvertes.fr/hal-02485052/document
+
 % Constants :
 %B  = 125e3; % Bandwidth of modulated signal
 %SF = 7;     % Spreading Factor
@@ -9,9 +11,6 @@ Ts = 1/Fs;  % Sampling period
 T  = M*Ts;  % because B*T=M
 %c  = [0 0 0 50 0 100 0 20 30];   % Symbols vector
 ts = (0:Ts:(length(c)*T)-Ts)';      % Time vector
-
-
-% Equations taken from : hal.archives-ouvertes.fr/hal-02485052/document
 
 %modulated=exp(2i*pi*(B/(2*T).*ts+c/T).*ts).*exp(-2i*pi*B.*ts);
 

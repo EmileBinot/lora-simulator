@@ -85,5 +85,5 @@ for i = 1: (size(received_data_binary,2))
     received_data_vector(:,i) = char(bin2dec(num2str(received_data_binary(:,i)')));
 end
 
-disp(["received : " + dec2bin(received_data_vector)])
+disp(["received : " + dec2bin(received_data_vector) + " (bin2dec)"])
 
