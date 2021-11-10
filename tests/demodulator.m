@@ -72,8 +72,6 @@ u = symunit;
 symbols_demod=[];
 T  = M*Ts;
 
-
-%figure(3);
 for i = 0:div-1
     signal_demod_fft_part = fft(signal_demod(1+i*128:i*128+128,:));
     f = (0:length(signal_demod_fft_part)-1)*Fs/length(signal_demod_fft_part);

@@ -1,0 +1,107 @@
+% SF=7;
+% r=[1:2^SF]';
+% 
+% total=[];
+% for SF=1:5
+%     new=[];
+%     
+%     %total=cat(SF,total,new)
+% end
+
+clear;
+bands=[125e3,250e3];
+
+SF=7;
+new7=[];
+for B=bands
+    for symbK=[1:2^SF]
+       new7=[new7,LoRa_Modulation(B,SF,symbK,1)];
+   end
+end
+
+SF=8;
+new8=[];
+for B=bands
+    for symbK=[1:2^SF]
+       new8=[new8,LoRa_Modulation(B,SF,symbK,1)];
+   end
+end
+
+SF=9;
+new9=[];
+for B=bands
+    for symbK=[1:2^SF]
+       new9=[new9,LoRa_Modulation(B,SF,symbK,1)];
+   end
+end
+save('symbols')
+
+% SF=10;
+% new10=[];
+% for B=bands
+%     for symbK=[1:2^SF]
+%        new10=[new10,LoRa_Modulation(B,SF,symbK,1)];
+%    end
+% end
+% 
+% SF=11;
+% new11=[];
+% for B=bands
+%     for symbK=[1:2^SF]
+%        new11=[new11,LoRa_Modulation(B,SF,symbK,1)];
+%    end
+% end
+% 
+% SF=12;
+% new12=[];
+% for B=bands
+%     for symbK=[1:2^SF]
+%        new12=[new12,LoRa_Modulation(B,SF,symbK,1)];
+%    end
+% end
+
+
+    % CR=3;     % Coding rate : {1,4}
+% SF=7;     % Coding rate  : {7,12}
+% B=125e3;  % Bandwidth : [125 kHz,250 kHz,500 kHz]
+% 
+% %symbK must be column, length : 2^SF
+% symbK=50;
+% modSymbK=[];
+% sprF=0;
+% band=0;
+% 
+% for SF = [7:12]
+%     r=[1:2^SF]';
+%     sprF=sprF+1;
+%     for symbK=[1:2^SF]
+%         band=0;
+%         for B = [125e3 250e3 500e3]
+%             band=band+1;
+%             modSymbK(:,:,sprF,band)=[modSymbK , r];
+%         end
+%     end
+% end
+% 
+% 
+% txSig = LoRa_Modulation(B,SF,symbols,1);
+% rxSig=txSig;
+% 
+% chirp = LoRa_Modulation(B,SF,zeros(1,length(rxSig)/2^SF),-1);
+% 
+% demodSig = rxSig.*chirp;
+% 
+% %% Plotting modulated signal
+% Fs = B;     % Sampling frequency
+% Ts = 1/Fs;  % Sampling period
+% ts = (0:Ts:(length(txSig)*Ts)-Ts)';
+% figure;
+% subplot(3,1,1);
+% spectrogram(txSig,20,15,128,B,'yaxis');    % no idea how it's working
+% title('txSig');
+% subplot(3,1,2);
+% spectrogram(chirp,20,15,128,B,'yaxis');    % no idea how it's working
+% title('demod chirp')  
+% subplot(3,1,3);
+% spectrogram(demodSig,20,15,128,B,'yaxis');    % no idea how it's working
+% title('txSig * demod chirp') 
