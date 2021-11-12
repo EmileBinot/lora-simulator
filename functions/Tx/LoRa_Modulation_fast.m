@@ -1,23 +1,45 @@
-function [rxSig,ts] = LoRa_Modulation_fast(B,SF,symbols,sign)
+function [txSig] = LoRa_Modulation_fast(SF,symbols,sign,modSymbK,demodChirp)
 %LORA_MODULATION Summary of this function goes here
 %   Detailed explanation goes here
 
 % Constants :
+
 M  = 2^SF;  % Number of possible symbols
-Fs = B;     % Sampling frequency
-Ts = 1/Fs;  % Sampling period
-T  = M*Ts;  % because B*T=M
-ts = (0:Ts:T-Ts)';      % Time vector
-rxSig=[];%SLOW
-%rxSig=zeros(length(symbols)*M,1); % Preallocation
 
-for k = 1:length(symbols)
-    symbK= 
-    rxSig=[rxSig ; symbK]; %SLOW
-    %rxSig((k-1)*M+1:(k-1)*M+M,:) = symbK;
+if(SF==7)
+    itSF=1;
+else
+    itSF=SF;
 end
-rxSig(1,1)=0;
 
+switch SF
+    case 7
+        start=1;
+    case 8
+        start=2^7;
+    case 9
+        start=2^7+2^8;
+    case 10
+        start=2^7+2^8+2^9;
+    case 11
+        start=2^7+2^8+2^9+2^10;
+    case 12
+        start=2^7+2^8+2^9+2^10+2^11;
+end
 
+txSig=zeros(length(symbols)*M,1);
+if sign == 1
+    for k = 1:length(symbols)
+        symbK= modSymbK(1:M,start+symbols(k));
+        txSig(M*(k-1)+1:M*k,:)=symbK; %SLOW
+    end
+elseif sign == -1
+    for k = 1:length(symbols)
+        symbK= demodChirp(1:M,SF-6);
+        txSig(M*(k-1)+1:M*k,:)=symbK; %SLOW
+    end
+end
+txSig=txSig(:);
+txSig(1,1)=1;
 end
 
