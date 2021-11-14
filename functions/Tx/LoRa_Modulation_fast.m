@@ -6,12 +6,6 @@ function [txSig] = LoRa_Modulation_fast(SF,symbols,sign,modSymbK,demodChirp)
 
 M  = 2^SF;  % Number of possible symbols
 
-if(SF==7)
-    itSF=1;
-else
-    itSF=SF;
-end
-
 switch SF
     case 7
         start=1;
@@ -33,6 +27,7 @@ if sign == 1
         symbK= modSymbK(1:M,start+symbols(k));
         txSig(M*(k-1)+1:M*k,:)=symbK; %SLOW
     end
+    
 elseif sign == -1
     for k = 1:length(symbols)
         symbK= demodChirp(1:M,SF-6);

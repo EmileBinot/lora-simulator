@@ -3,9 +3,9 @@ function [out] = LoRa_Symbols_To_Bits(symbols,SF)
 %   Detailed explanation goes here
 
 out = [];
-
 for i = 1 :size(symbols,1)
-    out = [ out ; de2bi(symbols(i,:),SF,'left-msb') ];
+    %out = [ out ; de2bi(symbols(i,:),SF,'left-msb') ];
+    out = [ out ; d2b(symbols(i,:),SF) ];
 end
 
 end

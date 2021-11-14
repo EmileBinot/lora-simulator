@@ -1,4 +1,4 @@
-function [out] = LoRa_Whitening(in)
+function [out] = LoRa_Whitening(in,whiteNoise)
 %UNTITLED8 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -6,9 +6,9 @@ function [out] = LoRa_Whitening(in)
 
 %using this function : https://linear-feedback-shift-register.readthedocs.io/en/latest/matlab.html
 
-s=[1 1 1 1 1 1 1 1 1];
-t=[9 5];
-[whiteNoise,c] =LFSRv2(s,t);
+% s=[1 1 1 1 1 1 1 1 1];
+% t=[9 5];
+% [whiteNoise,c] =LFSRv2(s,t);
 
 N=ceil(length(in)/length(whiteNoise));
 if N>1
@@ -16,6 +16,7 @@ if N>1
         whiteNoise=[whiteNoise, whiteNoise];
     end
 end
+
 N = min([length(in) length(whiteNoise)]); % cut-off to length of transmit symbols
 out = bitxor(in(1:N),whiteNoise(1:N)); % encode white
 
