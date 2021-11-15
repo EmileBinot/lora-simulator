@@ -1,10 +1,10 @@
-function [txSig,dataIn] = LoRa_Emitter(CR,SF,B,Pr_len,binary_data)
-%LORA_EMMITER Summary of this function goes here
+function [txSig,dataIn] = LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise)
+%UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
 %% Message to binary vector
 
-hammingIn = reshape(binary_data,4,[]); % Groups of 4 data bits 
+hammingIn = reshape(logical(binary_data),4,[]); % Groups of 4 data bits 
 
 % Adding padding to respect block sizes for interleaver
 while mod(length(hammingIn),SF)
@@ -23,7 +23,7 @@ hammingOut = hammingOut(:); % [CR+4,SF*x] matrix to [(CR+4)*SF*x,1] vector
 
 %% Whitening
 
-whiteOut = LoRa_Whitening(hammingOut');
+whiteOut = LoRa_Whitening(hammingOut',whiteNoise);
 
 %% Interleaving
 
@@ -41,6 +41,7 @@ end
 
 payload = LoRa_Bits_To_Symbols(interleaverOut);
 
+
 %% Symbols modulation
 
 %With preamble
@@ -52,9 +53,11 @@ payload = LoRa_Bits_To_Symbols(interleaverOut);
 % txSig= [ preamble_up_mod ; preamble_down_mod(1:floor((length(preamble_down_mod)))) ; payload_mod];
 
 %Without preamble
-payloadMod = LoRa_Modulation(B,SF,payload,1);
+%payloadMod = LoRa_Modulation_fast(SF,payload,1,modSymbK,demodChirp);
+payloadMod = LoRa_Modulation(SF,payload,1);
 
-txSig= [payloadMod];
+txSig= payloadMod;
+
 
 end
 

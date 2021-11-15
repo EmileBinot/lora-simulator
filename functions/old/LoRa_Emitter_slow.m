@@ -1,5 +1,5 @@
-function [txSig,dataIn] = LoRa_Emitter_fast(CR,SF,Pr_len,binary_data,modSymbK,demodChirp,whiteNoise)
-%UNTITLED2 Summary of this function goes here
+function [txSig,dataIn] = LoRa_Emitter_slow(CR,SF,B,Pr_len,binary_data)
+%LORA_EMMITER Summary of this function goes here
 %   Detailed explanation goes here
 
 %% Message to binary vector
@@ -23,7 +23,7 @@ hammingOut = hammingOut(:); % [CR+4,SF*x] matrix to [(CR+4)*SF*x,1] vector
 
 %% Whitening
 
-whiteOut = LoRa_Whitening(hammingOut',whiteNoise);
+whiteOut = LoRa_Whitening(hammingOut');
 
 %% Interleaving
 
@@ -41,7 +41,6 @@ end
 
 payload = LoRa_Bits_To_Symbols(interleaverOut);
 
-
 %% Symbols modulation
 
 %With preamble
@@ -53,11 +52,9 @@ payload = LoRa_Bits_To_Symbols(interleaverOut);
 % txSig= [ preamble_up_mod ; preamble_down_mod(1:floor((length(preamble_down_mod)))) ; payload_mod];
 
 %Without preamble
-%payloadMod = LoRa_Modulation_fast(SF,payload,1,modSymbK,demodChirp);
-payloadMod = LoRa_Modulation_faster(SF,payload,1);
+payloadMod = LoRa_Modulation(B,SF,payload,1);
 
-txSig= payloadMod;
-
+txSig= [payloadMod];
 
 end
 

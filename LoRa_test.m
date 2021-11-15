@@ -1,64 +1,75 @@
 clear;
 close all;
+clc;
+pbO = pbNotify('o.w5fpNT5CcknDygQxbxIImMoCAP4Z1HXm');
+
 CR=4;     % Coding rate : {1,4}
-SF=7;     % Coding rate  : {7,12}
 B=125e3;  % Bandwidth : [125 kHz,250 kHz,500 kHz]
 Pr_len=4; % Preamble length
-k=SF;
 
-EbNoVec = (0:10)';      % Eb/No values (dB)
 numSymPerFrame = 100;   % Number of LoRa symbols per frame
-M=2^SF;
-berEst = zeros(size(EbNoVec));
 
-load("symbols","modSymbK","demodChirp");
 load("noise","whiteNoise");
-snrVect=(-35:10)';
+snrVect=(-35:3);
+SFVect=(7:12);
+berEstAllSF=[];
 
-for n = 1:length(snrVect)
+
+pbO.notify(strcat(datestr(now,'HH:MM:SS'),' : Starting simulation : SF = (7:10), snrVect=(-35:10)'));
+
+for kSF = SFVect
     
-    % Convert Eb/No to SNR
-    %snrdB = EbNoVec(n) + 10*log10(k);
-    snrdB = snrVect(n);
-    % Reset the error and bit counters
-    numErrs = 0;
-    numBits = 0;
-    disp(snrVect(n));
-    tic
-    %while numErrs < 200 && numBits < 1e7
-    while numErrs < 300 && numBits < 1e7
-        % Generate binary data and convert to symbols
-        binary_data = randi([0 1],numSymPerFrame,CR+4);
-        %dataSym = bi2de(dataIn);
+    chr=int2str(kSF);
+    pbO.notify(strcat(datestr(now,'HH:MM:SS: '),chr));
+    
+    n=0;
+    for nSNR = snrVect
+        n=n+1;
+        % Pushbullet notifications
+        ch='SF=';
+        ch2=', SNR=';
+        chr=strcat(ch,int2str(kSF),ch2,int2str(nSNR));
+        pbO.notify(strcat(datestr(now,'HH:MM:SS: '),chr));
         
-        % QAM modulate using 'Gray' symbol mapping
-        %txSig = qammod(dataSym,M);
-        [txSig,dataIn]=LoRa_Emitter_fast(CR,SF,Pr_len,binary_data,modSymbK,demodChirp,whiteNoise); 
+        % Reset the error and bit counters
+        numErrs = 0;
+        numBits = 0;
+        disp(kSF);
+        disp(nSNR);
         
-        % Pass through AWGN channel
-        rxSig = awgn(txSig,snrdB,'measured');
+        tic
         
-        % Demodulate the noisy signal
-        [chirp,demodSig,dataOut]=LoRa_Receiver_fast(CR,SF,B,Pr_len,rxSig,modSymbK,demodChirp,whiteNoise);
-        % Convert received symbols to bits
-        %dataOut = de2bi(rxSym,k);
-        
-        % Calculate the number of bit errors
-        nErrors = biterr(dataIn,dataOut);
-        
-        % Increment the error and bit counters
-        numErrs = numErrs + nErrors;
-        numBits = numBits + numSymPerFrame*k;
-        
+        while numErrs < 200 && numBits < 1e7
+            % Generate binary data and convert to symbols
+            binary_data = randi([0 1],numSymPerFrame,CR+4);
+            
+            % QAM modulate using 'Gray' symbol mapping
+            [txSig,dataIn]=LoRa_Emitter(CR,kSF,Pr_len,binary_data,whiteNoise); 
+
+            % Pass through AWGN channel
+            rxSig = awgn(txSig,nSNR,'measured');
+
+            % Demodulate the noisy signal
+            [dataOut]=LoRa_Receiver(CR,kSF,B,Pr_len,rxSig,whiteNoise);
+
+            % Calculate the number of bit errors
+            nErrors = biterr(dataIn,dataOut);
+
+            % Increment the error and bit counters
+            numErrs = numErrs + nErrors;
+            numBits = numBits + numSymPerFrame*kSF;
+
+        end
+        toc
+        % Estimate the BER
+        berEst(n,:,kSF) = numErrs/numBits;
+        save('resultsBER','berEst');
     end
-    toc
-    % Estimate the BER
-    berEst(n) = numErrs/numBits;
-    save('resultsBER','berEst');
 end
+
 %berTheory = berawgn(EbNoVec,'fsk',128,'coherent');
 
-semilogy(snrVect,berEst,'*')
+semilogy(snrVect,berEst(:,:,9),'*')
 %hold on
 %semilogy(EbNoVec,berTheory)
 grid
