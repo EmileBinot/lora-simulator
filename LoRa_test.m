@@ -1,7 +1,7 @@
 clear;
 close all;
 clc;
-pbO = pbNotify('o.w5fpNT5CcknDygQxbxIImMoCAP4Z1HXm');
+pbO = pbNotify('o.7HywKe5XqdK4wEhbz23SrEnXI2TefM3T');
 
 CR=4;     % Coding rate : {1,4}
 B=125e3;  % Bandwidth : [125 kHz,250 kHz,500 kHz]
@@ -10,12 +10,13 @@ Pr_len=4; % Preamble length
 numSymPerFrame = 100;   % Number of LoRa symbols per frame
 
 load("noise","whiteNoise");
-snrVect=(-35:3);
+snrVect=(-35:5);
 SFVect=(7:12);
 berEstAllSF=[];
 
 
 pbO.notify(strcat(datestr(now,'HH:MM:SS'),' : Starting simulation : SF = (7:10), snrVect=(-35:10)'));
+currentPrecision = digits(6);
 
 for kSF = SFVect
     
@@ -29,7 +30,7 @@ for kSF = SFVect
         ch='SF=';
         ch2=', SNR=';
         chr=strcat(ch,int2str(kSF),ch2,int2str(nSNR));
-        pbO.notify(strcat(datestr(now,'HH:MM:SS: '),chr));
+        %pbO.notify(strcat(datestr(now,'HH:MM:SS: '),chr));
         
         % Reset the error and bit counters
         numErrs = 0;
@@ -62,7 +63,7 @@ for kSF = SFVect
         end
         toc
         % Estimate the BER
-        berEst(n,:,kSF) = numErrs/numBits;
+        berEst(n,:,kSF) = vpa(numErrs/numBits);
         save('resultsBER','berEst');
     end
 end

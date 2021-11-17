@@ -24,16 +24,16 @@ binary_data = binary_data(:);
 
 %% LoRa Emitter
 
-[txSig,dataIn]=LoRa_Emitter_fast(CR,SF,Pr_len,binary_data,modSymbK,demodChirp,whiteNoise); 
+[txSig,dataIn]=LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise); 
 
 %% Channel
 
 %rxSig=txSig;% Neutral
-rxSig=awgn(txSig,-29,'measured');
+rxSig=awgn(txSig,-20,'measured');
 % TODO : Rayleigh channel
 
 %% LoRa Receiver
-[chirp,demodSig,dataOut]=LoRa_Receiver_fast(CR,SF,B,Pr_len,rxSig,modSymbK,demodChirp,whiteNoise);
+[dataOut,chirp,demodSig]=LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise);
 %timer end
 toc
 % 

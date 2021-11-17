@@ -16,7 +16,7 @@ ylim([10^(-6) 10^0]);
 xlim([-35 -5]);
 legendStrings = "SF = " + string(SFVect) ;
 legend(legendStrings);
-title("BER Curves from LoRa simulation , AWGN channel (CR = 4, no CRC, no Gray coding)");
+title("BER Curves from LoRa simulation , AWGN channel (no hamming code, no CRC, no Gray coding)");
 
 xlabel('SNR (dB)')
 ylabel('BER')

@@ -1,4 +1,4 @@
-function [dataOut] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise)
+function [dataOut,chirpFull,demodSig] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 Fs=B;
