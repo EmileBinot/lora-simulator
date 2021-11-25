@@ -1,15 +1,15 @@
 clear;clc;close all;
-load('1511_simul_data');
+load('resultsBER_noHamming');
 
-snrVect=(-35:3);
+snrVect=(-35:5);
 SFVect=(7:12);
 
 prod=0;
 for kSF = SFVect
     prod = prod + 1;
     plot = semilogy(snrVect,berEst(:,:,kSF),'o-','LineWidth', 1.5);
-    plot(1).SeriesIndex = prod;
-    plot(1).ColorMode = 'auto';
+    %plot(1).SeriesIndex = prod;
+    %plot(1).ColorMode = 'auto';
     hold on
 end
 ylim([10^(-6) 10^0]);

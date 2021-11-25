@@ -46,18 +46,11 @@ payload = LoRa_Bits_To_Symbols(interleaverOut);
 
 %With preamble
 
-% preamble_up_mod = LoRa_Modulation(B,SF,zeros(Pr_len+2,1),1);
-% preamble_down_mod = LoRa_Modulation(B,SF,ones(4,1),-1);
-% payload_mod = LoRa_Modulation(B,SF,symbols,1);
-% 
-% txSig= [ preamble_up_mod ; preamble_down_mod(1:floor((length(preamble_down_mod)))) ; payload_mod];
-
-%Without preamble
-%payloadMod = LoRa_Modulation_fast(SF,payload,1,modSymbK,demodChirp);
+preambleUpMod = LoRa_Modulation(SF,zeros(Pr_len+2,1),1);
+preambleDownMod = LoRa_Modulation(SF,ones(3,1),-1);
 payloadMod = LoRa_Modulation(SF,payload,1);
 
-txSig= payloadMod;
-
+txSig= [preambleUpMod ; preambleDownMod(1:(2^SF)*2.25) ; payloadMod];
 
 end
 

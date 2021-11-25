@@ -29,11 +29,12 @@ binary_data = binary_data(:);
 %% Channel
 
 %rxSig=txSig;% Neutral
-rxSig=awgn(txSig,-20,'measured');
-% TODO : Rayleigh channel
+
+rxSig=[zeros(0,1); txSig];% Neutral
+rxSig=awgn(rxSig,-20,'measured');
 
 %% LoRa Receiver
-[dataOut,chirp,demodSig]=LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise);
+[dataOut,chirp,demodSig]=LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise);
 %timer end
 toc
 % 
@@ -53,8 +54,8 @@ subplot(3,1,3);
 spectrogram(demodSig,20,15,128,B,'yaxis');    % no idea how it's working
 title('txSig * demod chirp')  
 
-figure;
-plot(ts,real(rxSig),ts,real(txSig));
+%figure;
+%plot(ts,real(rxSig),ts,real(txSig));
 
 [~,ber] = biterr(dataIn,dataOut);
 disp(['BER : ' num2str(ber)])
