@@ -6,7 +6,7 @@
 N   = 1000;               %Samples
 M   = 5;                  %Array elements in ULA
 C   = 10;
-snir = 20*log10(1/C)
+snir = 20*log10(1/C);
 U   = zeros(M,N);
 Rhat= zeros(M); 
 rng(0,'twister');

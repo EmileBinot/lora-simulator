@@ -5,7 +5,7 @@ SIRdB = -20;
 
 N=4;
 
-NumPilots=10;
+NumPilots=100;
 NumPayload=1000;
 
 theta_deg=30;
@@ -32,6 +32,11 @@ Y=y(:,1:NumPilots).';
 p=pilots.';
 
 w_hat=inv(Y'*Y)*Y'*p;
+
+% Y'*Y = empirical total covariance
+% Y'*p = estimate of channel
+% We do that because spacial covariance matrix is hard to get.
+% w_hat is the least square estimate of w
 
 %Reconstrut QAMs
 
