@@ -1,10 +1,10 @@
 clear; close all;
 Num_users=1;
 TX_ant_w=1;
-TX_ant_h=1;
+TX_ant_h=50;
 RX_ant_w=1;
 RX_ant_h=1;
-Num_paths=20;
+Num_paths=1;
 
 [H,a_TX,a_RX, a_TX_los, a_RX_los, alpha, AoD_el,AoD_az,AoA_el,AoA_az,LoS]...
     =generate_channels(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths);
@@ -23,8 +23,7 @@ SNRdB=20;
 s=randsrc(1,NumPayload,[1+1i 1-1i -1+1i -1-1i])/sqrt(2);
 noise=10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2);
 
-y=alpha.'*s;
 
 figure;
 plot(s,'b.'); hold on;
-plot(y,'r.'); hold on;
+plot(a_TX_los,'g.'); hold on

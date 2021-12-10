@@ -8,7 +8,7 @@ N=4;
 NumPilots=100;
 NumPayload=1000;
 
-theta_deg=30;
+theta_deg=0;
 x_desired=exp(-1i*pi*sin(theta_deg*pi/180)*[0:N-1].');
 
 Interf_angle=-50;

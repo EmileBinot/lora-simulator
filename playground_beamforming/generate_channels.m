@@ -20,7 +20,7 @@ function [H,a_TX,a_RX, a_TX_los, a_RX_los, alpha, AoD_el,AoD_az,AoA_el,AoA_az,Lo
 % AoD_el : Elevation Angle of Departure
 % AoD_az : Azimuth Angle of Departure -> from the BS
 % AoA_el : Elevation Angle of Arrival
-% AoA_ar : Azimith Angle of Arrival -> on the UE
+% AoA_ar : Azimuth Angle of Arrival -> on the UE
 % LoS : Index of the LoS traject in the alpha
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,11 +42,13 @@ for u=1:1:Num_users
 %     AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
 %     AoA_az(u,:)=2*pi*rand(1,Num_paths);
     
-    %because we want users only in a [0,pi] azimuth angle, 0 elevation
+    %because we want users only in a [-pi/2,pi/2] azimuth angle, 0 elevation
     %angle
-    AoD_el(u,:)=zeros(1,Num_paths);
+    AoD_el(u,:)=pi*rand(1,Num_paths)-pi/2;
+    %AoD_el(u,:)=zeros(1,Num_paths)-pi/2; %same elevation
     AoD_az(u,:)=-pi/2+pi*rand(1,Num_paths);
-    AoA_el(u,:)=zeros(1,Num_paths);
+    AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
+    %AoA_el(u,:)=zeros(1,Num_paths)-pi/2; %same elevation
     AoA_az(u,:)=-pi/2+pi*rand(1,Num_paths);
     
     %Compute a CN(0,1) law, normalized by the number of paths

@@ -1,10 +1,10 @@
 clear; close all;
 Num_users=1;
-TX_ant_w=2;
+TX_ant_w=1;
 TX_ant_h=1;
 RX_ant_w=1;
 RX_ant_h=1;
-Num_paths=1;
+Num_paths=5000;
 
 [H,a_TX,a_RX, a_TX_los, a_RX_los, alpha, AoD_el,AoD_az,AoA_el,AoA_az,LoS]...
     =generate_channels(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths);
@@ -20,38 +20,18 @@ Num_paths=1;
 
 NumPayload=50;
 SNRdB=20;
-
 s=randsrc(1,NumPayload,[1+1i 1-1i -1+1i -1-1i])/sqrt(2);
 noise=10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2);
 
-steering_vector=exp(-1i*pi*sin(AoD_az(LoS))*[0:TX_ant_w-1]).';
-% w=steering_vector';
-% 
-% x=w*s;
-% Hprod=permute(H,[3 2 1]);
-% y_beamforming=Hprod.'*x;
-% y=Hprod*s;
+y=H*s+noise;
 
-Hprod=permute(H,[3 2 1]);
-y=Hprod.*s;
+a=conj(H);
+x_hat=a*y;
 
 figure;
 plot(s,'b.'); hold on;
 plot(y,'r.'); hold on;
+plot(x_hat,'g.'); hold off
 
-
-
-
-%% PLOT BEAMPATTERN
-
-lambda = 1;         % Incoming Signal Wavelength in (m).
-d      = lambda/2;  % Interelement Distance in (m).
-angle = -90:0.1:90;
-L = length(angle);
-C1 = zeros(1,L);
-steering_vector
-for k=1:L
-    u = (d/lambda)*sin(angle(k)*pi/180);
-    v = exp(-1i*2*pi*u*(0:TX_ant_w-1).')/sqrt(TX_ant_w); % Azimuth Scanning Steering Vector.
-    C1(k) = steering_vector'*v;
-end
+figure;
+plot(abs(alpha)); hold off

@@ -14,10 +14,10 @@
 % Minimum Mean Square Error equalization
 
 clear
-N = 10^6; % number of bits or symbols
+N = 50; % number of bits or symbols
 Eb_N0_dB = [0:25]; % multiple Eb/N0 values
-nTx = 2;
-nRx = 2;
+nTx = 1;
+nRx = 1;
 for ii = 1:length(Eb_N0_dB)
 
     % Transmitter
