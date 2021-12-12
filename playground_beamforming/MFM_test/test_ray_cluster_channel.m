@@ -16,7 +16,7 @@ symbol_bandwidth_Hz = 50e6;
 carrier_frequency_Hz = 5e9;
 propagation_velocity_meters_per_sec = 3e8;
 noise_power_per_Hz_dBm_Hz = -174;
-num_streams = 500;
+num_streams = 4;
 transmit_power_dBm = 0;
 
 % -------------------------------------------------------------------------
@@ -46,7 +46,7 @@ dev_tx.set_marker('bx');
 % Create and set transmit array.
 %  * Using a uniform linear array for simplicity here.
 % -------------------------------------------------------------------------
-Nt = 20;
+Nt = 50;
 array_transmit_object = array.create(Nt);
 dev_tx.set_transmit_array(array_transmit_object);
 
@@ -63,7 +63,7 @@ dev_rx.set_symbol_bandwidth(symbol_bandwidth_Hz);
 dev_rx.set_num_streams(num_streams);
 dev_rx.set_noise_power_per_Hz(-174,'dBm_Hz');
 dev_rx.set_name('Rx-1');
-dev_rx.set_coordinate([0,1,0]);
+dev_rx.set_coordinate([0,10,0]);
 dev_rx.set_marker('bo');
 
 % -------------------------------------------------------------------------
@@ -145,9 +145,8 @@ csi = lnk.compute_channel_state_information();
 % Set transmitter's precoder.
 %  * Both are valid; the second is a shortcut.
 % -------------------------------------------------------------------------
-%F=(exp(-1i*pi*sin(pi/2)*[0:Nt-1])/Nt).'*ones(1,num_streams);
-%dev_tx.transmitter.set_precoder(F);
-%dev_tx.set_precoder(F);
+% dev_tx.transmitter.set_precoder(F);
+% dev_tx.set_precoder(F);
 
 % -------------------------------------------------------------------------
 % Set receiver's combiner.
@@ -161,14 +160,20 @@ csi = lnk.compute_channel_state_information();
 % -------------------------------------------------------------------------
 %dev_tx.set_transmit_channel_state_information(csi);
 %dev_tx.configure_transmitter('eigen');
+
+%dev_tx.set_transmit_channel_state_information(csi);
+%dev_tx.configure_transmitter('eigen');
+
+
 steering_vector=exp(-1i*pi*sin(0)*[0:Nt-1])/Nt;
 array_transmit_object.set_weights(steering_vector)
 array_transmit_object.show_array_pattern();
+
 % -------------------------------------------------------------------------
 % Another way to set the receiver's combiner.
 % -------------------------------------------------------------------------
-%dev_rx.set_receive_channel_state_information(csi);
-%dev_rx.configure_receiver('mmse');
+dev_rx.set_receive_channel_state_information(csi);
+dev_rx.configure_receiver('mmse');
 
 % -------------------------------------------------------------------------
 % Set transmit symbol.
