@@ -24,7 +24,6 @@ Noise=10^(-SNRdB/20)*(randn(size(y_desired))+1i*randn(size(y_desired)))/sqrt(2);
 y=y_desired+Noise;
 
 %Reconstrut QAMs
-
 subplot(1,2,1);
 s_hat_MRC=x_desired'/N*y(:,NumPilots+1:end);
 plot(s_hat_MRC,'.'); grid; hold on ;

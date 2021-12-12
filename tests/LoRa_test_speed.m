@@ -29,7 +29,6 @@ close all;
 % disp(['BER : ' num2str(ber)])
 
 %% SPEED TEST #2
-pbO = pbNotify('o.w5fpNT5CcknDygQxbxIImMoCAP4Z1HXm');
 sum=0;
 Nit=200;
 Ndata=100;
@@ -51,7 +50,7 @@ for k = 1:Nit
     [txSig,dataIn]=LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise); 
     rxSig=txSig;% Neutral channel
     % LoRa Receiver
-    [dataOut]=LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise);
+    [dataOut]=LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise);
 	sum=sum+toc;% timer end
 end
 

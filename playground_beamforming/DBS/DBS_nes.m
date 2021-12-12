@@ -22,7 +22,6 @@ N_Txantennas=TX_ant_w*TX_ant_h;
 
 NumPayload=50;
 SNRdB=30;
-
 s=(randsrc(1,NumPayload,[1+1i 1-1i -1+1i -1-1i])/sqrt(2)).';
 noise=(10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2)).';
 

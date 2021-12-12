@@ -1,6 +1,20 @@
 function [txSig] = LoRa_Modulation(SF,symbols,sign)
-%LORA_MODULATION Summary of this function goes here
-%   Detailed explanation goes here
+%LoRa_Modulation LoRa Modulator
+%
+%   [txSig] = LoRa_Modulation(SF,symbols,sign)
+%
+% INPUTS :
+%
+%   SF : Spreading Factor (7:12)
+%   symbols : vector of symbols to modulate
+%   sign : (-1,+1), used to choose between down-chirps and up-chirps.
+%
+% OUTPUT :
+%
+%   txSig : IQ modulated signal
+%
+% For more information, see <a href="matlab: 
+% web('doi.org/10.1016/j.comcom.2020.02.034')">Towards an SDR implementation of LoRa</a>
 
 % Constants :
 M  = 2^SF;  % Number of possible symbols

@@ -1,7 +1,6 @@
 clear;
 close all;
 clc;
-pbO = pbNotify('o.7HywKe5XqdK4wEhbz23SrEnXI2TefM3T');
 
 CR=4;     % Coding rate : {1,4}
 B=125e3;  % Bandwidth : [125 kHz,250 kHz,500 kHz]
@@ -14,23 +13,14 @@ snrVect=(-35:5);
 SFVect=(7:12);
 berEstAllSF=[];
 
-
-pbO.notify(strcat(datestr(now,'HH:MM:SS'),' : Starting simulation : SF = (7:10), snrVect=(-35:10)'));
 currentPrecision = digits(6);
 
 for kSF = SFVect
     
-    chr=int2str(kSF);
-    pbO.notify(strcat(datestr(now,'HH:MM:SS: '),chr));
     
     n=0;
     for nSNR = snrVect
         n=n+1;
-        % Pushbullet notifications
-        ch='SF=';
-        ch2=', SNR=';
-        chr=strcat(ch,int2str(kSF),ch2,int2str(nSNR));
-        %pbO.notify(strcat(datestr(now,'HH:MM:SS: '),chr));
         
         % Reset the error and bit counters
         numErrs = 0;

@@ -1,6 +1,21 @@
 function [out] = LoRa_Interleaving(in,CR,SF)
-
-% algorithm : www.researchgate.net/publication/339255011_Towards_an_SDR_implementation_of_LoRa_Reverse-engineering_demodulation_strategies_and_assessment_over_Rayleigh_channel
+%LoRa_Interleaving LoRa style interleaving block
+%
+%   [out] = LoRa_Interleaving(in,CR,SF)
+%
+% INPUTS :
+%
+%   in : SF x (4+CR) matrix
+%   CR : Coding Rate (1:4)
+%   SF : Spreading Factor (7:12)
+%
+% OUTPUT :
+%
+%   out : CR+4 x SF matrix
+%
+% For more information on the algorithm used, see <a href="matlab: 
+% web('doi.org/10.1016/j.comcom.2020.02.034')">Towards an SDR implementation of LoRa</a>
+% See also LoRa_DeInterleaving
 
 %% Interleaving
 out=zeros(CR+4,SF);

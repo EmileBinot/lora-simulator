@@ -1,6 +1,30 @@
 function [dataOut,chirpFull,demodSig] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%LoRa_Receiver Wrapping the LoRa Rx device
+%
+%   [dataOut,chirpFull,demodSig] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise)
+%
+%   Rx chain : Demodulation -> Deinterleaver -> Dewhitening -> Hamming -> Formatting
+%
+% INPUTS :
+%
+%   CR : Coding Rate (1:4)
+%   SF : Spreading Factor (7:12)
+%   B : Bandwidth of received signal
+%   Pr_len : Preamble length (min. = 2) (not used)
+%   rxSig : Received IQ signal
+%   whiteNoise : White noise (to increase speed, the noise is already generated)
+%
+% OUTPUTS :
+%
+%   chirpFull : Can be used for debug
+%   demodSig : Can be used for debug/plot
+%   dataOut : Formatted received payload to be compared with dataIn at Tx end
+%   of the channel
+%
+% See also LoRa_Decode_Hamming, LoRa_Dewhitening, LoRa_Deinterleaving,
+% LoRa_Symbols_To_Bits, LoRa_Modulation
+
+
 Fs=B;
 M=2^SF;
 %% Demodulating

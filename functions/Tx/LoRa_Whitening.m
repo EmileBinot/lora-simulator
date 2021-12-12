@@ -1,14 +1,22 @@
 function [out] = LoRa_Whitening(in,whiteNoise)
-%UNTITLED8 Summary of this function goes here
-%   Detailed explanation goes here
-
-%noise source : 9 bits LFSR intialized to 0
-
-%using this function : https://linear-feedback-shift-register.readthedocs.io/en/latest/matlab.html
-
-% s=[1 1 1 1 1 1 1 1 1];
-% t=[9 5];
-% [whiteNoise,c] =LFSRv2(s,t);
+%LoRa_Whitening LoRa style whitening block
+%
+%   [out] = LoRa_Whitening(in,whiteNoise)
+%
+% INPUTS :
+%
+%   in : input binary vector
+%   whiteNoise : already calculated white noise binary vector
+%
+% OUTPUT :
+%
+%   out : whitened bits vector
+%
+% noise source : 9 bits LFSR intialized to 0
+%
+% For more information, see <a href="matlab: 
+% web('https://linear-feedback-shift-register.readthedocs.io/en/latest/matlab.html')">LFSR function used</a>
+% See also LoRa_Dewhitening
 
 N=ceil(length(in)/length(whiteNoise));
 if N>1

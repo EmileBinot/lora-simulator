@@ -3,7 +3,7 @@ close all;
 Ls=1000;
 SNR_dB=40;
 P=1;
-multipath=4;
+multipath=2;
 
 signal_r=2*(rand([Ls,1])>0.5)-1;
 signal_i=2*(rand([Ls,1])>0.5)-1;

@@ -44,11 +44,11 @@ for u=1:1:Num_users
     
     %because we want users only in a [-pi/2,pi/2] azimuth angle, 0 elevation
     %angle
-    AoD_el(u,:)=pi*rand(1,Num_paths)-pi/2;
-    %AoD_el(u,:)=zeros(1,Num_paths)-pi/2; %same elevation
+    %AoD_el(u,:)=pi*rand(1,Num_paths)-pi/2;
+    AoD_el(u,:)=zeros(1,Num_paths)+pi/2; %same elevation
     AoD_az(u,:)=-pi/2+pi*rand(1,Num_paths);
-    AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
-    %AoA_el(u,:)=zeros(1,Num_paths)-pi/2; %same elevation
+    %AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
+    AoA_el(u,:)=zeros(1,Num_paths)+pi/2; %same elevation
     AoA_az(u,:)=-pi/2+pi*rand(1,Num_paths);
     
     %Compute a CN(0,1) law, normalized by the number of paths

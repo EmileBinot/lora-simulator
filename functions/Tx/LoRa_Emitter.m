@@ -1,6 +1,26 @@
 function [txSig,dataIn] = LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+%LoRa_Emitter Wrapping the LoRa Tx device
+%
+%   [txSig,dataIn] = LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise)
+%
+%   Tx chain : Hamming -> Whitening -> Interleaver -> Bits to Symbols -> Modulation
+%
+% INPUTS :
+%
+%   CR : Coding Rate (1:4)
+%   SF : Spreading Factor (7:12)
+%   Pr_len : Preamble length (min. = 2)
+%   binary_data : Binary vector payload to send
+%   whiteNoise : White noise (to increase speed, the noise is already generated)
+%
+% OUTPUTS :
+%
+%   txSig : IQ Signal to be sent
+%   dataIn : Formatted payload to be compared with dataOut at the other end
+%   of the channel
+%
+% See also LoRa_Encode_Hamming, LoRa_Whitening, LoRa_Interleaving,
+% LoRa_Bits_To_Symbols, LoRa_Modulation
 
 %% Message to binary vector
 
