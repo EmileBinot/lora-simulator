@@ -8,6 +8,7 @@ multipath=2;
 signal_r=2*(rand([Ls,1])>0.5)-1;
 signal_i=2*(rand([Ls,1])>0.5)-1;
 QPSK=signal_r+1i*signal_i;
+
 Es=((QPSK)' *(QPSK) ) / Ls;
 N0=Es/10^(SNR_dB/10);
 h=sqrt(P/2)*(randn(1,multipath)+1i*randn(1,multipath));
