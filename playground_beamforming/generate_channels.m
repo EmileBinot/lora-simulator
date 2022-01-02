@@ -42,14 +42,17 @@ for u=1:1:Num_users
 %     AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
 %     AoA_az(u,:)=2*pi*rand(1,Num_paths);
     
-    %because we want users only in a [-pi/2,pi/2] azimuth angle, 0 elevation
-    %angle
-    %AoD_el(u,:)=pi*rand(1,Num_paths)-pi/2;
-    AoD_el(u,:)=zeros(1,Num_paths)+pi/2; %same elevation
-    AoD_az(u,:)=-pi/2+pi*rand(1,Num_paths);
-    %AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
-    AoA_el(u,:)=zeros(1,Num_paths)+pi/2; %same elevation
-    AoA_az(u,:)=-pi/2+pi*rand(1,Num_paths);
+    AoD_el(u,:)=pi/16*rand(1,Num_paths)-pi/32;
+    AoD_az(u,:)=2*pi*rand(1,Num_paths);
+    AoA_el(u,:)=pi/16*rand(1,Num_paths)-pi/32;
+    AoA_az(u,:)=2*pi*rand(1,Num_paths);
+%     %because we want users only in a [-pi/2,pi/2] azimuth angle, 0 elevation
+%     %angle
+%     AoD_el(u,:)=zeros(1,Num_paths); %same elevation
+%     AoD_az(u,:)=2*pi*rand(1,Num_paths);
+%     %AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
+%     AoA_el(u,:)=zeros(1,Num_paths); %same elevation
+%     AoA_az(u,:)=2*pi*rand(1,Num_paths);
     
     %Compute a CN(0,1) law, normalized by the number of paths
     alpha(u,:)=sqrt(1/Num_paths)*sqrt(1/2)*(randn(1,Num_paths)+1j*randn(1,Num_paths));

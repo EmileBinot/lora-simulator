@@ -1,4 +1,4 @@
-function [dataOut,chirpFull,demodSig] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise)
+function [dataOut,chirpFull,demodSig] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise,bypHamm)
 %LoRa_Receiver Wrapping the LoRa Rx device
 %
 %   [dataOut,chirpFull,demodSig] = LoRa_Receiver(CR,SF,B,Pr_len,rxSig,whiteNoise)
@@ -82,7 +82,7 @@ dewhiteningOut = LoRa_Whitening(deinterleaverOutVect,whiteNoise)';
 hammingDecIn = reshape(dewhiteningOut,CR+4,[]);
 hammingDecOut=zeros(4,length(hammingDecIn));
 for i = 1: length(hammingDecIn)
-    hammingDecOut(:,i) = LoRa_Decode_Hamming(hammingDecIn(:,i)',CR);
+    hammingDecOut(:,i) = LoRa_Decode_Hamming(hammingDecIn(:,i)',CR,bypHamm);
 end
 
 dataOut = hammingDecOut(:);

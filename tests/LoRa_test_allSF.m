@@ -13,7 +13,7 @@ berEst = zeros(size(EbNoVec));
 
 load("symbols","modSymbK","demodChirp");
 load("noise","whiteNoise");
-snrVect=(-35:10)';
+snrVect=(-30:-5)';
 
 for n = 1:length(snrVect)
     

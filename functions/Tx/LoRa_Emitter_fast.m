@@ -1,5 +1,5 @@
-function [txSig,dataIn] = LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise,bypHamm)
-%LoRa_Emitter Wrapping the LoRa Tx device
+function [txSig,dataIn] = LoRa_Emitter_fast(CR,SF,Pr_len,binary_data,whiteNoise,bypHamm)
+%LoRa_Emitter Wrapping the LoRa Tx device WITHOUT PREAMBLE
 %
 %   [txSig,dataIn] = LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise)
 %
@@ -66,11 +66,12 @@ payload = LoRa_Bits_To_Symbols(interleaverOut);
 
 %With preamble
 
-preambleUpMod = LoRa_Modulation(SF,zeros(Pr_len+2,1),1);
-preambleDownMod = LoRa_Modulation(SF,ones(3,1),-1);
+%preambleUpMod = LoRa_Modulation(SF,zeros(Pr_len+2,1),1);
+%preambleDownMod = LoRa_Modulation(SF,ones(3,1),-1);
 payloadMod = LoRa_Modulation(SF,payload,1);
 
-txSig= [preambleUpMod ; preambleDownMod(1:(2^SF)*2.25) ; payloadMod];
+%txSig= [preambleUpMod ; preambleDownMod(1:(2^SF)*2.25) ; payloadMod];
+txSig= [payloadMod];
 
 end
 

@@ -12,6 +12,7 @@ load("noise","whiteNoise");
 snrVect=-35:0.5:5;
 SFVect=(7:12);
 berEstAllSF=[];
+bypassHamming=1; % BYPASSING HAMMING
 
 currentPrecision = digits(6);
 
@@ -35,13 +36,13 @@ for kSF = SFVect
             binary_data = randi([0 1],numSymPerFrame,CR+4);
             
             % QAM modulate using 'Gray' symbol mapping
-            [txSig,dataIn]=LoRa_Emitter_fast(CR,kSF,Pr_len,binary_data,whiteNoise); 
+            [txSig,dataIn]=LoRa_Emitter_fast(CR,kSF,Pr_len,binary_data,whiteNoise,bypassHamming); 
 
             % Pass through AWGN channel
             rxSig = awgn(txSig,nSNR,'measured');
 
             % Demodulate the noisy signal
-            [dataOut]=LoRa_Receiver(CR,kSF,B,Pr_len,rxSig,whiteNoise);
+            [dataOut]=LoRa_Receiver(CR,kSF,B,Pr_len,rxSig,whiteNoise,bypassHamming);
 
             % Calculate the number of bit errors
             nErrors = biterr(dataIn,dataOut);
@@ -60,7 +61,7 @@ end
 
 %berTheory = berawgn(EbNoVec,'fsk',128,'coherent');
 
-semilogy(snrVect,berEst(:,:,9),'*')
+semilogy(snrVect,berEst(:,:,7),'*')
 %hold on
 %semilogy(EbNoVec,berTheory)
 grid

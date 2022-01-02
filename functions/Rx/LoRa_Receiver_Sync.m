@@ -1,4 +1,4 @@
-function [dataOut,chirpFull,demodSig] = LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise)
+function [dataOut,chirpFull,demodSig] = LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise,bypHamm)
 %LoRa_Receiver_Sync Wrapping the LoRa Rx device
 %
 %   [dataOut,chirpFull,demodSig] = LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise)
@@ -26,7 +26,7 @@ delayInt=lags(idx);
 rxSigFixed=rxSig(delayInt+length(preamble)+1:end);
 
 % Passing synchronized signal to syncronized receiver
-[dataOut,chirpFull,demodSig]=LoRa_Receiver(CR,SF,B,Pr_len,rxSigFixed,whiteNoise);
+[dataOut,chirpFull,demodSig]=LoRa_Receiver(CR,SF,B,Pr_len,rxSigFixed,whiteNoise,bypHamm);
 
 end
 

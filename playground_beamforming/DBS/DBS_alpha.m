@@ -7,6 +7,7 @@ RX_ant_w=1;
 RX_ant_h=1;
 Num_paths=4;
 N_ant_TX=TX_ant_w*TX_ant_h;
+
 [H,a_TX,a_RX, a_TX_los, a_RX_los, alpha, AoD_el,AoD_az,AoA_el,AoA_az,LoS]...
     =generate_channels(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths);
 % OUTPUT :
@@ -18,39 +19,33 @@ N_ant_TX=TX_ant_w*TX_ant_h;
 % AoA_ar : Azimuth Angle of Arrival -> on the UE
 % LoS : Index of the LoS traject in the alpha
 
-% -------------------------------------------------------------------------
-% General setup
-% -------------------------------------------------------------------------
+% Tx
 NumPayload=50;
 SNRdB=35;
+
 s=1/sqrt(2)*randsrc(1,NumPayload,[1+1i 1-1i -1+1i -1-1i]);
 noise=10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2);
 n=ones(TX_ant_w,1)*s/N_ant_TX;
 H=squeeze(H).';
 
-% -------------------------------------------------------------------------
-% No precoding
-% -------------------------------------------------------------------------
+% No precoding 
 x=ones(TX_ant_w,1)*s/N_ant_TX;
-
-
-% -------------------------------------------------------------------------
 % DBS precoding
-% -------------------------------------------------------------------------
-steering_vector=exp(-1i*pi*sin(AoD_az(LoS))*[0:TX_ant_w-1])/N_ant_TX;
+steering_vector=exp(-1i*pi*sin(AoD_az(LoS))*[1:TX_ant_w]);
 Wdbs=steering_vector'; 
 x_beam=Wdbs*s;
 
-% -------------------------------------------------------------------------
-% Receiver
-% -------------------------------------------------------------------------
+% Rx
 
 % No precoding
 y=H*x+noise; 
-
 % DBS precoding
 y_beam=H*x_beam+noise;  
 
+% Received pwr
+
+Pwr=(norm(y)^2)/NumPayload
+Pwr_beam=(norm(y_beam)^2)/NumPayload
 % -------------------------------------------------------------------------
 % Plots
 % -------------------------------------------------------------------------
@@ -58,3 +53,6 @@ figure;
 plot(s,'b.'); hold on;
 plot(y,'r.'); hold on;
 plot(y_beam,'g.');
+
+figure;
+plot(abs(alpha));
