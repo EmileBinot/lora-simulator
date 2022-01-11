@@ -55,7 +55,7 @@ for kSF = SFVect
         toc
         % Estimate the BER
         berEst(n,:,kSF) = vpa(numErrs/numBits);
-        save('./Simulations/everySF/everySF_data','berEst');
+        save('./Simulations/Copy_of_everySF/everySF_data','berEst');
     end
 end
 
