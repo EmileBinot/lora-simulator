@@ -4,9 +4,9 @@ function [tsSig,ts] = LoRa_Modulation_slow(B,SF,symbols,sign)
 
 % Constants :
 M  = 2^SF;  % Number of possible symbols
-Fs = B;     % Sampling frequency
+Fs = B*4;     % Sampling frequency
 Ts = 1/Fs;  % Sampling period
-T  = M*Ts;  % because B*T=M
+T  = M*Ts*4;  % because B*T=M
 ts = (0:Ts:T-Ts)';      % Time vector
 tsSig=[];%SLOW
 %rxSig=zeros(length(symbols)*M,1); % Preallocation

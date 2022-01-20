@@ -1,4 +1,4 @@
-function [txSig,dataIn] = LoRa_Emitter_fast(CR,SF,Pr_len,binary_data,whiteNoise,bypHamm)
+function [txSig,dataIn,interleaverOut] = LoRa_Emitter_fast(CR,SF,Pr_len,binary_data,whiteNoise,bypHamm)
 %LoRa_Emitter Wrapping the LoRa Tx device WITHOUT PREAMBLE
 %
 %   [txSig,dataIn] = LoRa_Emitter(CR,SF,Pr_len,binary_data,whiteNoise)

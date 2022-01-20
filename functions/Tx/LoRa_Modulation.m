@@ -15,10 +15,10 @@ function [txSig] = LoRa_Modulation(SF,symbols,sign)
 %
 % For more information, see <a href="matlab: 
 % web('doi.org/10.1016/j.comcom.2020.02.034')">Towards an SDR implementation of LoRa</a>
-
+prod=1;
 % Constants :
-M  = 2^SF;  % Number of possible symbols
-ka=1:2^SF;
+M  = prod*2^SF;  % Number of possible symbols
+ka=1:(2^SF)*prod;
 
 %txSig=zeros(length(symbols)*M,1); % Preallocation
 
