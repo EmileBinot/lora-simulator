@@ -15,25 +15,25 @@ SNRdB=35;
 
 s=1/sqrt(2)*randsrc(1,NumPayload,[1+1i 1-1i -1+1i -1-1i]);
 noise=10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2);
-n=ones(TX_ant_w,1)*s/N_ant_TX;
+n=ones(N_ant_TX,1)*s/N_ant_TX;
 H=squeeze(H).';
 
 figure;
 r=0;
-for theta = 0:pi/128:pi
+for phi = 0:pi/128:pi
     r=r+1;
     % Tx DBS precoding
-    steering_vector=1/(sqrt(N_ant_TX))*exp(-1i*pi*sin(theta)*[1:TX_ant_h]);
+    steering_vector=1/(sqrt(N_ant_TX))*exp(-1i*pi*sin(phi)*[1:TX_ant_h]);
     Wdbs=steering_vector'; 
     x_beam=Wdbs*s;
 
     % Rx
     y_beam=H*x_beam+noise; 
-    Pwr(r)=(norm(y_beam)^2)/NumPayload;
+    Pwr(r)=(norm(y_beam)^2)/NumPayload; % measurate received pwr
 end
-theta = 0:pi/128:pi;
-plot(theta/pi,Pwr)
-polarplot(theta,Pwr)
+phi = 0:pi/128:pi;
+plot(phi/pi,Pwr)
+polarplot(phi,Pwr)
 [~,idx]=max(Pwr);
 angle(idx)
 title(max(Pwr))

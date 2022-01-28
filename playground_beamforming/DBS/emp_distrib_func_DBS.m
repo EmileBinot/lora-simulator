@@ -37,9 +37,12 @@ for r = 1:1000
     Wdbs=steering_vector'/N_ant_TX; 
     x_beam=Wdbs*s;
     y_beam=H*x_beam+noise;  
-
+    
+    plot(s,'b.'); hold on;
+    plot(y_beam,'r.'); hold on;
+    plot(bad_y_beam,'g.');
+    pause(1);
     % Received pwr
-
     Pwr(r)=(norm(y)^2)/NumPayload;
     Pwr_beam(r)=(norm(y_beam)^2)/NumPayload;
     Pwr_beam_bad(r)=(norm(bad_y_beam)^2)/NumPayload;
