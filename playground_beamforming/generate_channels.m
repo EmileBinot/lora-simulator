@@ -42,9 +42,9 @@ for u=1:1:Num_users
     AoA_el(u,:)=pi*rand(1,Num_paths)-pi/2;
     AoA_az(u,:)=2*pi*rand(1,Num_paths);
     
-    
     %Compute a CN(0,1) law, normalized by the number of paths
     alpha(u,:)=sqrt(1/Num_paths)*sqrt(1/2)*(randn(1,Num_paths)+1j*randn(1,Num_paths));
+    
     %Find the index of the LOS path
     [~, LoS(u)]= max(alpha(u,:));
 
