@@ -1,4 +1,4 @@
-function [H,AoD,AoA,alpha,LoS] = angular_channel(Tx_ant,Rx_ant,num_path)
+function [H,AoD,AoA,alpha,bestPath] = angular_channel(Tx_ant,Rx_ant,num_path)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,14 +7,14 @@ Rx_ant_vect=0:1:Rx_ant-1;
 
 H=zeros(Rx_ant,Tx_ant);  % One user channel
 
-AoD=[3*pi/4 pi/2 pi/3];
-AoA=[2*pi/3 pi/2 pi/4];
+AoD=[pi/2 pi/4 pi/3];
+AoA=[pi/2 pi/3 pi/4];
 
 % AoD=2*pi*rand(1,Num_paths);
 % AoA=2*pi*rand(1,Num_paths);
 
-alpha=[1 0.8 0.1];
-[~, LoS]= max(alpha);
+alpha=[1 0.5 0.1];
+[~, bestPath]= max(alpha);
 
 for i = 1:num_path
     e_t=ones(num_path,1);

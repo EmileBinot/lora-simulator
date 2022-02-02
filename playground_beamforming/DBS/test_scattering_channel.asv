@@ -1,0 +1,98 @@
+clear;
+close all;
+rng('default');
+
+Tx_ant=4;
+Rx_ant=1;
+num_path=3;
+% [H,AoD,AoA,alpha,bestPath] = scattering_channel(Tx_ant,Rx_ant,num_path);
+
+% Reflections
+nReflections=3;
+ReflectingObj=[round(rand(1,nReflections)*10,1) ;round((rand(1,nReflections)-0.5)*10,1)];
+ReflectingObj=[5 5 1; 5 -5 9];
+Alice=[10 ; 0]; % [x ; y]
+Bob=[0;0];
+x=0:0.1:10;
+xp=repmat(x,3,1);
+
+a1=(ReflectingObj(2,:)-0)./(ReflectingObj(1,:)-0);
+TxPath=a1.'*x;
+a2=(Alice(2,:)-ReflectingObj(2,:))./(Alice(1,:)-ReflectingObj(1,:));
+b2=a2*10;
+RxPath=a2.'*x-b2.';
+
+plot(ReflectingObj(1,:),ReflectingObj(2,:),'x','MarkerSize',10,'LineWidth',2); hold on;
+plot(Bob(1,:),Bob(2,:),'bo',Alice(1,:),Alice(2,:),'go','MarkerSize',10,'LineWidth',2); hold on;
+plot(x,TxPath); hold on;
+plot(x,RxPath);
+xlim([-1 11]);
+ylim([-10 10]);
+
+AoD=atan(ReflectingObj(2,:)./ReflectingObj(1,:))+pi/2; % atan(X) returns values in the interval [-?/2, ?/2].
+AoA=atan((10-ReflectingObj(1,:))./ReflectingObj(2,:))+pi/2;
+AoD_deg=rad2deg(AoD);
+AoA_deg=rad2deg(AoA);
+% plot(xp((x<ReflectingObj(1,:).'),TxPath(x<ReflectingObj(1,:).'));hold on;
+% plot(xp(x<ReflectingObj(1,:).'),RxPath(x>ReflectingObj(1,:).'));
+% 
+% NumPayload=500;
+% SNRdB=35;
+% bitsIn = randi([0 1],NumPayload,1)';
+% s = map_QPSK(1,bitsIn) ;
+% noise=10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2);
+% 
+% % good DBS precoding, pointing to the best path (LoS)
+% angle=pi/2;
+% % steering_vector=exp(-1i*pi*sin(AoD_el(LoS))*[1:TX_ant_h]);
+% steering_vector=exp(-1i*pi*cos(AoD(bestPath))*[1:Tx_ant]);
+% Wdbs=steering_vector'/Tx_ant; 
+% x_beam=Wdbs*s;
+% y_beam=H*x_beam+noise;
+% 
+% bitsOut = demap_QPSK(1,y_beam);
+% [~,ratio] = biterr(bitsIn,bitsOut);
+% disp(ratio);
+% 
+% % figure(1);
+% % plot(s,'.');hold on;
+% % plot(y_beam,'.');hold off;
+% % 
+% figure(2);
+% colorVec = [repmat(linspace(1,0.5,10)',1,1) zeros(10,1) zeros(10,1)];
+% plot(0,0,'ob',10,0,'og',8,-5,'or','MarkerSize',10,'LineWidth',2); hold on;
+% plot(ReflectingObj(:,1),ReflectingObj(:,2),'x','MarkerSize',10,'LineWidth',2); hold on;
+% % y=1:1:10;
+% x=0:0.01:10;
+% % Paths=zeros(num_path,length(x));
+% for i = 1:num_path
+%     if i == bestPath
+%         Ls='-';
+%         plot(x,zeros(length(x)),'Color','black','LineStyle',Ls); hold on;
+% %         Paths(i,:)=zeros(1,length(x));
+%     else
+%         Ls='--';
+% 
+%         x_D(i) = 20*cos(pi/2-AoD(i));
+%         y_D(i) = 20*sin(pi/2-AoD(i));
+%         a1=y_D(i)/x_D(i);
+%         Txpath=a1*x;
+% 
+%         x_A(i) = 20*cos(pi/2-AoA(i));
+%         y_A(i) = 20*sin(pi/2-AoA(i));
+%         a2=y_A(i)/x_A(i);
+%         b=a2*10;
+%         Refpath=-a2*x+b;
+% 
+%         intersec=b/(a1+a2);
+% 
+%         plot(x(x<intersec),Txpath(x<intersec),'Color','black','LineStyle',Ls); hold on;
+%         plot(x(x>intersec),Refpath(x>intersec),'Color','black','LineStyle',Ls); hold on;
+%         
+% %         Paths(i,1:length(Txpath(x<floor(intersec))))=Txpath(x<floor(intersec));
+% %         Paths(i,length(Txpath(x<floor(intersec)))+2:end)=Refpath(x>ceil(intersec));
+% %         Txpath=Refpath;
+%     end
+% end
+% xlim([-1 11]);
+% ylim([-10 10]);
