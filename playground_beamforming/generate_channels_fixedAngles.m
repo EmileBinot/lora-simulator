@@ -1,5 +1,5 @@
 function [H,a_TX,a_RX, a_TX_los, a_RX_los, alpha, AoD_el,AoD_az,AoA_el,AoA_az,LoS]...
-    =generate_channels_fixedAngles(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths,angle_el,angle_az)
+    =generate_channels_fixedAngles(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths,angle_el_deg,angle_az_deg,angle_el_deg_worst,angle_az_deg_worst)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -43,14 +43,15 @@ for u=1:1:Num_users
 %     AoA_az(u,:)=2*pi*rand(1,Num_paths);
 %     angle_el=pi/4;
 %     angle_az=0;
-    AoD_el(u,:)=[angle_el 0 0]; % attenuations
-    AoD_az(u,:)=[angle_az 0 0];
-    AoA_el(u,:)=[angle_el 0 0];
-    AoA_az(u,:)=[angle_az 0 0];
+    
+    AoD_el(u,:)=[angle_el_deg*pi/180 angle_el_deg_worst*pi/180 -(angle_el_deg_worst*pi/180)]; % attenuations
+    AoD_az(u,:)=[0 0 0];
+    AoA_el(u,:)=[angle_el_deg*pi/180 angle_el_deg_worst*pi/180 -(angle_el_deg_worst*pi/180)];
+    AoA_az(u,:)=[0 0 0];
     
     
     %Compute a CN(0,1) law, normalized by the number of paths
-    alpha(u,:)=sqrt(1/Num_paths)*sqrt(1/2)*([1 0.1 0.1]+1j*[1 0.1 0.1]);
+    alpha(u,:)=sqrt(1/Num_paths)*sqrt(1/2)*([100 0.1 0.1]+1j*[0 0 0]);
     %Find the index of the LOS path
     [~, LoS(u)]= max(alpha(u,:))
 

@@ -1,7 +1,7 @@
 % clear; close all;
 Num_users=1;
-TX_ant_w=4;
-TX_ant_h=1;
+TX_ant_w=1;
+TX_ant_h=4;
 RX_ant_w=1;
 RX_ant_h=1;
 Num_paths=3;
@@ -16,20 +16,20 @@ SNRdB=25;
 H=squeeze(H).';
 tries = 30;
 grayCoding=1;
-angle_el_deg=0;  % no more than abs(90) [-pi/2 pi/2]
-angle_az_deg=0;	% no more than abs(90)
+angle_el_deg=50;  % no more than abs(90) [-pi/2 pi/2]
+angle_az_deg=50;	% no more than abs(90)
 angle_el_deg_worst=25;  % no more than abs(90)
 angle_az_deg_worst=0;	% no more than abs(90)
 
 for r = 1:tries
     [H,a_TX,a_RX, a_TX_los, a_RX_los, alpha, AoD_el,AoD_az,AoA_el,AoA_az,LoS]...
-        =generate_channels_fixedAngles(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths,angle_el_deg,angle_az_deg,angle_el_deg_worst,angle_az_deg_worst)
+        =generate_channels_fixedAngles(Num_users,TX_ant_w,TX_ant_h,RX_ant_w,RX_ant_h,Num_paths,angle_el_deg,angle_az_deg,angle_el_deg_worst,angle_az_deg_worst);
     
     bitsIn = randi([0 1],NumPayload,1)';
     s = map_QPSK(grayCoding,bitsIn) ;
     noise=10^(-SNRdB/20)*(randn(size(s))+1i*randn(size(s)))/sqrt(2);
     H=squeeze(H).';
-
+% transpose(exp(1j*pi*(ind_TX_w*sin(AoD_az(u,k))*sin(AoD_el(u,k))+ind_TX_h*cos(AoD_el(u,k))) ));
     % bad DBS precoding (=no beamsteering), pointing always in one
     % direction
     [~, worst_path]= min(alpha(:));
@@ -47,7 +47,16 @@ for r = 1:tries
     good_Wdbs=good_steering_vector'/N_ant_TX; 
     good_x_beam=good_Wdbs*s;
     good_y_beam=H*good_x_beam+noise;
-   
+    
+    % BIS
+    good_steering_vector_h=exp(1i*pi*sin(AoD_el(LoS))*[1:TX_ant_h]*sin(AoD_el(LoS)));
+    good_steering_vector_w=exp(1i*pi*cos(AoD_el(LoS))*[1:TX_ant_w]);
+    good_steering_vector=kron(good_steering_vector_w,good_steering_vector_h);
+    good_Wdbs=good_steering_vector'/N_ant_TX; 
+    good_x_beam=good_Wdbs*s;
+    good_y_beam=H*good_x_beam+noise;
+    
+%     prod=exp(1j*pi*([1:TX_ant_w]*sin(AoD_az(LoS))*sin(AoD_el(LoS))+[1:TX_ant_h]*cos(AoD_el(LoS))) );
     
     bitsOut_bad = demap_QPSK(grayCoding,bad_y_beam);
     bitsOut_good = demap_QPSK(grayCoding,good_y_beam);
@@ -80,7 +89,7 @@ steering_vector_w=good_steering_vector_w;
 angle_deg=[-90:1:90]; 
 for k=1:length(angle_deg)
     x_test_h=exp(1i*pi*sin(angle_deg(k)*pi/180)*[0:TX_ant_h-1].');
-    ArrayFactor_h(1,k)=abs(steering_vector_h*x_test_h);
+    ArrayFactor_h(1,k)=abs(prod*x_test_h);
     x_test_w=exp(1i*pi*sin(angle_deg(k)*pi/180)*[0:TX_ant_w-1].');
     ArrayFactor_w(1,k)=abs(steering_vector_w*x_test_w);
 end
