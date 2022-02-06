@@ -1,6 +1,6 @@
 # lora-simulator
 
-lora-simulator is a LoRa physical layer simulation platform, written in MATLAB.
+lora-simulator is a LoRa physical layer simulation platform.
 
 ## What's inside
 
