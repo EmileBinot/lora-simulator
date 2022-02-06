@@ -6,12 +6,15 @@ lora-simulator is a LoRa physical layer simulation platform.
 
 - Simulating LoRa BER function of SNR and Spreading Factor :
 
-![BER](examples/BER.png)
+<p align="center">
+  <img src="examples/BER.png" />
+</p>
 
 - Simulating a Ray-casting MiSo channel + eavesdropper (Eve) :
 
-![ray-casting](examples/ray-casting.png)
-
+<p align="center">
+  <img src="examples/ray-casting.png" />
+</p>
 
 
 ## What's inside
