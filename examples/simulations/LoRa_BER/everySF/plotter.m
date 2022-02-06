@@ -1,7 +1,7 @@
 clear; close all; clc;
 
 % Load the data file you want to plot
-load("everySF_data_copy");
+load("everySF_try1");
 
 figure;
 snrVect=-35:0.5:5;

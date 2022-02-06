@@ -4,15 +4,15 @@ close all;
 
 Tx_ant=16;
 Rx_ant=1;
-num_path=3;
+nReflections=2;
 % [H,AoD,AoA,alpha,bestPath] = scattering_channel(Tx_ant,Rx_ant,num_path);
 
 % Reflections
-nReflections=num_path;
-% ReflectingObj=[round(rand(1,nReflections)*10,1) ;round((rand(1,nReflections)-0.5)*10,1)];
-ReflectingObj=[5 5 3; 5 -5 0];
+ReflectingObj=[round(rand(1,nReflections)*10,1) 5;round((rand(1,nReflections)-0.5)*10,1) 0];
+% ReflectingObj=[5 5 3; 5 -5 0];
 Alice=[10 ; 0]; % [x ; y]
 Bob=[0;0];
+Eve=[8;-4];
 x=0:0.1:10;
 xp=repmat(x,3,1);
 
@@ -23,15 +23,31 @@ b2=a2*10;
 RxPath=a2.'*x-b2.';
 
 figure(1);
-plot(ReflectingObj(1,:),ReflectingObj(2,:),'x','MarkerSize',10,'LineWidth',2); hold on;
-plot(Bob(1,:),Bob(2,:),'bo',Alice(1,:),Alice(2,:),'go','MarkerSize',10,'LineWidth',2); hold on;
+plot(ReflectingObj(1,1:end-1),ReflectingObj(2,1:end-1),'x','MarkerSize',10,'LineWidth',2); hold on;
+plot(Bob(1,:),Bob(2,:),'bo',Alice(1,:),Alice(2,:),'go',Eve(1,:),Eve(2,:),'ro','MarkerSize',10,'LineWidth',2); hold on;
+
+
+% idx=find(TxPath(1:end-1,:)==ReflectingObj(2,1:end-1).');
+% plot(x(:,1:idx),TxPath(:,1:idx)); hold on;
+% plot(x,RxPath.*(x.'>=ReflectingObj(1,:)).');
+% for i=1:size(ReflectingObj)-1
+%     idx(i)=find(TxPath(i,:)==ReflectingObj(2,i).');
+% end
+
 plot(x,TxPath); hold on;
-plot(x,RxPath);
+plot(x,RxPath); hold on;
+
 xlim([-1 11]);
 ylim([-10 10]);
+xlabel('x');
+ylabel('y');
+text(Bob(1,:)-0.3,Bob(2,:)-1,'Bob');
+text(Alice(1,:)-0.4,Alice(2,:)-1,'Alice');
+text(Eve(1,:)-0.3,Eve(2,:)-1,'Eve');
 
-AoD=[atan(ReflectingObj(2,:)./ReflectingObj(1,:))+pi/2]; % atan(X) returns values in the interval [-?/2, ?/2]
-AoA=[atan((10-ReflectingObj(1,:))./ReflectingObj(2,:))+pi/2];
+
+AoD=[pi/2 atan(ReflectingObj(2,:)./ReflectingObj(1,:))+pi/2]; % atan(X) returns values in the interval [-pi/2, pi/2]
+AoA=[pi/2 atan((10-ReflectingObj(1,:))./ReflectingObj(2,:))+pi/2];
 AoD_deg=rad2deg(AoD);
 AoA_deg=rad2deg(AoA);
 
@@ -43,9 +59,9 @@ H=zeros(Rx_ant,Tx_ant);  % One user channel
 alpha=[1 1 1];
 [~, bestPath]= max(alpha);
 
-for i = 1:num_path
-    e_t=ones(num_path,1);
-    e_r=ones(num_path,1);
+for i = 1:nReflections
+    e_t=ones(nReflections,1);
+    e_r=ones(nReflections,1);
     
     e_t=(1/(sqrt(Tx_ant)))*exp(-1i*pi*cos(AoD(i))*Tx_ant_vect.');
     e_r=(1/(sqrt(Rx_ant)))*exp(-1i*pi*cos(AoA(i))*Rx_ant_vect.');
