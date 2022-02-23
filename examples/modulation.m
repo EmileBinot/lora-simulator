@@ -29,9 +29,12 @@ plot(f,abs(Y));
 % figure;
 % plot(ts,real(txSig),ts,imag(txSig));
 
-% figure;
-% subplot(3,1,1);
-% spectrogram(txSig,20,15,-B/2:1e3:B/2,Fs,'yaxis');    % no idea how it's working
+figure;
+%spectrogram(txSig,20,15,-B/2:1e3:B/2,Fs,'yaxis');    % no idea how it's working
+[scalar,fs,ts] = spectrogram(txSig,64,16,64,'centered');
+
+spectrogram(txSig,16,15,64,'centered','yaxis')
+
 % title('txSig');
 % subplot(3,1,2);
 % spectrogram(txSig,20,15,-B/2:1e3:B/2,B,'yaxis');

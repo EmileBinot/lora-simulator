@@ -36,7 +36,8 @@ chirp = LoRa_Modulation(SF,0,-1); % Creating the demodulation chirp
 % for i = 1:length(rxSig)/(M)
 %     chirpFull(M*(i-1)+1:M*(i),1)=chirp;
 % end
-chirpFull=repmat(chirp,length(rxSig)/(M),1);
+%chirpFull=repmat(chirp,length(rxSig)/(M),1);
+chirpFull=repmat(chirp,round(length(rxSig)/M),1);
 demodSig=rxSig.*chirpFull;
 
 

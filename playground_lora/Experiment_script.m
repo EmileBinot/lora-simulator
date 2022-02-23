@@ -1,6 +1,6 @@
 clear;
 clc;
-close all;
+%close all;
 %% TODO :
 % TODO : ADD preamble
 % TODO : MORE SPEED, deep testing to see where to optimize
@@ -18,9 +18,10 @@ B=125e3;  % Bandwidth : [125 kHz,250 kHz,500 kHz]
 Pr_len=4; % Preamble length
 % load("symbols","modSymbK","demodChirp");
 load("noise","whiteNoise");
-binary_data=zeros(5,1);
-binary_data(:,2:8) = de2bi([2,50,40,90,120]);
-binary_data = binary_data(:);
+% binary_data=zeros(5,1);
+% binary_data(:,2:8) = de2bi([2,50,40,90,120]);
+% binary_data = binary_data(:);
+binary_data = randi([0 1],20,CR+4);
 
 %% LoRa Emitter
 
@@ -30,32 +31,25 @@ binary_data = binary_data(:);
 
 %rxSig=txSig;% Neutral
 
-rxSig=[zeros(0,1); txSig];% Neutral
-rxSig=awgn(rxSig,20,'measured');
-
+rxSig=[zeros(2500,1); txSig];% Neutral
 %% LoRa Receiver
-[dataOut,chirp,demodSig]=LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise,0);
-%timer end
-toc
-% 
-% Plotting modulated signal
-Fs = B;     % Sampling frequency
-Ts = 1/Fs;  % Sampling period
-ts = (0:Ts:(length(txSig)*Ts)-Ts)';
+[dataOut,chirp,demodSig,lags,c]=LoRa_Receiver_Sync(CR,SF,B,Pr_len,rxSig,whiteNoise,0);
 
-% figure;
-% subplot(3,1,1);
-% spectrogram(txSig,20,15,128,B,'yaxis');    % no idea how it's working
-% title('txSig')  
-% subplot(3,1,2);
-% spectrogram(chirp,20,15,128,B,'yaxis');    % no idea how it's working
-% title('demod chirp')  
-% subplot(3,1,3);
-% spectrogram(demodSig,20,15,128,B,'yaxis');    % no idea how it's working
-% title('txSig * demod chirp')  
+figure(1);
+subplot(2,1,1);
+spectrogram(rxSig,16,15,64,'yaxis');
+[~,~,~,pxx,fc,tc] = spectrogram(rxSig,16,15,64,'yaxis','MinThreshold',0);
+h= plot(tc(pxx>0)*6.25,fc(pxx>0)/6,'.');
+ax = ancestor(h, 'axes');
+ax.XAxis.Exponent = 0;
+ax.XAxis.TickLabelFormat = '%.0f';
+xlabel('Frequency (Normalized)');
+xlabel('Samples');
+title('Trame reçue')  
 
-figure;
-spectrogram(txSig,20,15,128,B,'yaxis');
-
-[~,ber] = biterr(dataIn,dataOut);
-disp(['BER : ' num2str(ber)])
+subplot(2,1,2);
+h=stem(lags,c); %hold on;
+ax = ancestor(h, 'axes');
+ax.XAxis.Exponent = 0;
+ax.XAxis.TickLabelFormat = '%.0f';
+title('Corrélation entre preambule et trame')  
