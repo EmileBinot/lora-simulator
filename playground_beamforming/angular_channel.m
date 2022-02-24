@@ -7,11 +7,11 @@ Rx_ant_vect=0:1:Rx_ant-1;
 
 H=zeros(Rx_ant,Tx_ant);  % One user channel
 
-AoD=[pi/2 pi/4 pi/3];
-AoA=[pi/2 pi/3 pi/4];
+% AoD=[pi/2 pi/4 pi/3];
+% AoA=[pi/2 pi/3 pi/4];
 
-% AoD=2*pi*rand(1,Num_paths);
-% AoA=2*pi*rand(1,Num_paths);
+AoD=pi*rand(1,Num_paths);
+AoA=pi*rand(1,Num_paths);
 
 alpha=[1 0.5 0.1];
 [~, bestPath]= max(alpha);

@@ -14,7 +14,7 @@ AoA=[pi/2 pi/3 pi/4];
 % AoD=2*pi*rand(1,Num_paths);
 % AoA=2*pi*rand(1,Num_paths);
 
-alpha=[1 0.5 0.1];
+alpha=[1 1 1];
 [~, bestPath]= max(alpha);
 
 for i = 1:num_path

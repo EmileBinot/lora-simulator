@@ -3,7 +3,7 @@ close all;
 
 Tx_ant=4;
 Rx_ant=1;
-num_path=1;
+num_path=5;
 [H,AoD,AoA,alpha,bestPath] = angular_channel(Tx_ant,Rx_ant,num_path);
 
 NumPayload=500;
