@@ -101,7 +101,6 @@ y_beam_mrt=H*x_beam_mrt+noise;
 r=0;
 for angle=0:pi/180:pi
     r=r+1;
-    
     steering_vector=exp(-1i*pi*cos(angle)*[1:Tx_ant]);
     ArrayFactor_w(1,r)=abs(steering_vector*Wmrt);
 end
