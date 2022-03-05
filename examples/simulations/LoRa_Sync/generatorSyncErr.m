@@ -12,6 +12,7 @@ load("noise","whiteNoise");
 snrVect=-40:1:-10;
 %snrVect=100:5:325;
 SFVect=(7:9);
+% SFVect=7;
 %SFVect=[7 8];
 berEstAllSF=[];
 bypassHamming=1; % BYPASSING HAMMING
@@ -36,9 +37,8 @@ for kSF = SFVect
         
         tic
         err_sum=0;
-        frameSent=0;
         
-        while frameSent < 500
+        for frameSent=1:500
             
             % Generate binary data and convert to symbols
             binary_data = randi([0 1],numSymPerFrame,CR+4);
@@ -56,16 +56,16 @@ for kSF = SFVect
             offset_hat=mod(lags(idx),M);
             
 %             err=abs(offset-offset_hat)/length(rxSig);
-            err=abs(offset-offset_hat);
+            err(frameSent,n,kSF)=abs(offset-offset_hat);
             % Increment the error and bit counters
-            err_sum=err_sum+err;
-            frameSent = frameSent + 1;
+%             err_sum=err_sum+err;
+%             frameSent = frameSent + 1;
         end
-        err_avg=err_sum/frameSent;
+%         err_avg=err_sum/frameSent;
         toc
         % Estimate the BER
-        error(n,:,kSF) = err_avg;
-        save('./examples/simulations/LoRa_Sync/loraSync_data','error','snrVect','SFVect');
+%         error(n,:,kSF) = err_avg;
+        save('./examples/simulations/LoRa_Sync/loraSync_data','err','snrVect','SFVect');
     end
 end
 

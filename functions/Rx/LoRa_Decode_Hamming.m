@@ -42,41 +42,37 @@ if(bypass==0)
            end
            %disp(['[HAMMING]: corrected   = ', num2str(corrected)]);
        case 3
-           % calculating syndrome
-           syndrome(:,3)=xor(xor(xor(in(1),in(2)),in(4)),in(7));
-           syndrome(:,2)=xor(xor(xor(in(1),in(3)),in(4)),in(6));
-           syndrome(:,1)=xor(xor(xor(in(2),in(3)),in(4)),in(5));
-
-           % correcting the error (only 1 correctable error)
-           if (b2d(syndrome)~= 0)
-                correction_vector=zeros(1,7);
-                correction_vector(1,8-(b2d(syndrome)))=1;
-                correction_vector([4 1 2 7 3 6 5])=correction_vector([1 2 3 4 5 6 7]);
-                corrected=xor(in,correction_vector);
-                %disp(['[HAMMING]: corrected   = ', num2str(corrected)]);
-           end
+            n=4+CR;
+            k=4;
+            Q=[0 1 1;1 1 0;1 1 1;1 0 1];
+            H=[Q.' eye(n-k)];
+            syndrome=mod(in*H.',2);
+            % generate lookup table
+            E=[zeros(1,n-k+4); eye(n-k+4)];
+            S=E*H.';
+            for i=1:size(S,1)
+                if S(i,:)==syndrome
+                    l=i;
+                    corrected=xor(in,E(l,:));
+                end
+            end
        case 4
-           % calculating syndrome
-           syndrome(:,4)=xor(xor(xor(xor(xor(xor(xor(in(1),in(2)),in(3)),in(4)),in(5)),in(6)),in(7)),in(8));
-           syndrome(:,3)=xor(xor(xor(in(1),in(2)),in(4)),in(8));
-           syndrome(:,2)=xor(xor(xor(in(1),in(3)),in(4)),in(7));
-           syndrome(:,1)=xor(xor(xor(in(2),in(3)),in(4)),in(6));
-
-           % correcting/detecting errors (up to 2 detectable errors)
-           if ((b2d(syndrome(:,1:3))~=0) && b2d(syndrome(:,4)==1))
-                correction_vector=zeros(1,8);
-                correction_vector(1,8-(b2d(syndrome(:,1:3))))=1;
-                correction_vector([4 1 2 8 3 7 6 5])=correction_vector([1 2 3 4 5 6 7 8]);
-                corrected=xor(in,correction_vector);
-                %disp('[HAMMING]: correction as in H(7,4)');
-           elseif((b2d(syndrome(:,1:3))==0) && b2d(syndrome(:,4)==1))
-               corrected=xor(in,[0 0 0 0 1 0 0 0]);
-               %disp('[HAMMING]: parity bit corrupted');
-           elseif((b2d(syndrome(:,1:3))~=0) && b2d(syndrome(:,4)==0))
-               %disp('[HAMMING]: double error');
-               corrected=in; % WHICH DECISION TO TAKE ?
-           end
-           %disp(['[HAMMING]: corrected   = ', num2str(corrected)]);
+            n=4+CR;
+            k=4;
+            Q=[0 1 1 1;1 1 0 1;1 1 1 0;1 0 1 1];
+            H=[Q.' eye(n-k)];
+            syndrome=mod(in*H.',2);
+            if syndrome==[0 0 0 0]
+%                 disp(["no errors"]);
+            else
+                parity=xor(xor(xor(xor(xor(xor(xor(in(1),in(2)),in(3)),in(4)),in(5)),in(6)),in(7)),in(8));
+                if parity==1
+%                      disp(["1 erreur corrigeable -> envoi de rc(:,1:7) vers decodeur 7,3"]);
+                    corrected=LoRa_Decode_Hamming(in(:,1:7),3,0);
+                else
+%                      disp(["2 erreurs !"]);
+                end
+            end
        otherwise
           disp('[HAMMING]: WRONG CR');
     end
